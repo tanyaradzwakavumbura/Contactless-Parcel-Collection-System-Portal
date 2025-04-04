@@ -2,13 +2,13 @@
 <div class="col-lg-4 col-md-6 mg-t-10">
     <div class="card" style="border-color:#7CB74B; border-width:1px; border-radius:10px">
         <div class="card-body pd-y-20 pd-x-25">
-            <a href="view_all_full_members">
+            <a href="#">
                 <div class="row row-sm">
                     <div class="col-12">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h3 class="tx-normal tx-rubik tx-spacing--1 mg-b-5">
-                                    <?php echo $count_total_full_members;?>
+                                    <?php echo $count_all_lockers;?>
                                 </h3>
                                 <h6 class="tx-12 tx-semibold tx-uppercase tx-spacing-1 tx-primary mg-b-5">
                                     Total Lockers
@@ -33,16 +33,18 @@
     </div><!-- card -->
 </div><!-- col -->
 
+
+
 <div class="col-lg-4 col-md-6 mg-t-10">
     <div class="card" style="border-color:#7CB74B; border-width:1px; border-radius:10px">
         <div class="card-body pd-y-20 pd-x-25">
-            <a href="view_available_lockers">
+            <a href="#">
                 <div class="row row-sm">
                     <div class="col-12">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h3 class="tx-normal tx-rubik tx-spacing--1 mg-b-5">
-                                   12
+                                   <?php echo $count_all_available_lockers;?>
                                 </h3>
                                 <h6 class="tx-12 tx-semibold tx-uppercase tx-spacing-1 tx-primary mg-b-5">
                                     Available Lockers
@@ -70,13 +72,13 @@
 <div class="col-lg-4 col-md-6 mg-t-10">
     <div class="card" style="border-color:#7CB74B; border-width:1px; border-radius:10px">
         <div class="card-body pd-y-20 pd-x-25">
-            <a href="view_unavailable_lockers">
+            <a href="#">
                 <div class="row row-sm">
                     <div class="col-12">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h3 class="tx-normal tx-rubik tx-spacing--1 mg-b-5">
-                                   10
+                                   <?php echo $count_all_unavailable_lockers;?>
                                 </h3>
                                 <h6 class="tx-12 tx-semibold tx-uppercase tx-spacing-1 tx-primary mg-b-5">
                                     Unavailable Lockers
@@ -101,19 +103,16 @@
     </div><!-- card -->
 </div><!-- col -->
 
-
-
-
 <div class="col-lg-4 col-md-6 mg-t-10">
     <div class="card" style="border-color:#7CB74B; border-width:1px; border-radius:10px">
         <div class="card-body pd-y-20 pd-x-25">
-            <a href="view_all_full_members">
+            <a href="#">
                 <div class="row row-sm">
                     <div class="col-12">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h3 class="tx-normal tx-rubik tx-spacing--1 mg-b-5">
-                                    <?php echo $count_total_first_timers_members;?>
+                                    <?php echo $count_all_parcels;?>
                                 </h3>
                                 <h6 class="tx-12 tx-semibold tx-uppercase tx-spacing-1 tx-primary mg-b-5">
                                     Total Parcels
@@ -141,13 +140,13 @@
 <div class="col-lg-4 col-md-6 mg-t-10">
     <div class="card" style="border-color:#7CB74B; border-width:1px; border-radius:10px">
         <div class="card-body pd-y-20 pd-x-25">
-            <a href="view_all_full_members">
+            <a href="#">
                 <div class="row row-sm">
                     <div class="col-12">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h3 class="tx-normal tx-rubik tx-spacing--1 mg-b-5">
-                                    <?php echo $count_all_baptized_members;?>
+                                    <?php echo $count_all_active_parcels;?>
                                 </h3>
                                 <h6 class="tx-12 tx-semibold tx-uppercase tx-spacing-1 tx-primary mg-b-5">
                                     Active Parcels
@@ -171,13 +170,13 @@
 <div class="col-lg-4 col-md-6 mg-t-10">
     <div class="card" style="border-color:#7CB74B; border-width:1px; border-radius:10px">
         <div class="card-body pd-y-20 pd-x-25">
-            <a href="view_all_full_members">
+            <a href="#">
                 <div class="row row-sm">
                     <div class="col-12">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h3 class="tx-normal tx-rubik tx-spacing--1 mg-b-5">
-                                    <?php echo $count_total_foundation_members;?>
+                                    <?php echo $count_all_collected_parcels;?>
                                 </h3>
                                 <h6 class="tx-12 tx-semibold tx-uppercase tx-spacing-1 tx-primary mg-b-5">
                                    Collected Parcels
@@ -198,11 +197,7 @@
     </div><!-- card -->
 </div><!-- col -->
 
-    
-  
 
-
-    
     <br>
     <div class="col-lg-12 col-xl-12 text-center">
         <br>

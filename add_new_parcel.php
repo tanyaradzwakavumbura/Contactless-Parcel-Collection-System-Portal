@@ -126,9 +126,9 @@ include("includes/session.php");
                     </div>
                     <div class="d-none d-md-block">
                        
-                        <a href="view_all_cells.php" class="btn btn-sm pd-x-15 btn-warning btn-uppercase mg-l-5"><i data-feather="book" class="wd-10 mg-r-5"></i>View All Pending Parcels</a>
+                        <a href="view_pending_parcels_normal_user.php" class="btn btn-sm pd-x-15 btn-warning btn-uppercase mg-l-5"><i data-feather="book" class="wd-10 mg-r-5"></i>View All Pending Parcels</a>
 
-                        <a href="record_new_cell.php" class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5"><i data-feather="book" class="wd-10 mg-r-5"></i> View All Intransit Parcels</a>
+                        <a href="view_all_in_transit_parcels_by_normal_user.php" class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5"><i data-feather="book" class="wd-10 mg-r-5"></i> View All Intransit Parcels</a>
                     </div>
                 </div>
 
@@ -160,6 +160,8 @@ include("includes/session.php");
                                                     <option value="Large">Large</option>
                                                 </select>
                                             </div>
+
+                                            
                                             
                                             <div class="form-group">
                                                 <label class="d-block">Parcel Sent to Province</label>
@@ -177,7 +179,7 @@ include("includes/session.php");
                                                     <option value="Midlands">Midlands</option>
                                                 </select>
                                             </div>
-
+                                           
                                             <div class="form-group">
                                                 <label class="d-block">Assigned Locker : <small>Auto Assignment</small></label>
                                                 <input type="text" style="border-color:#7CB74B; border-width:1px; border-radius:10px" class="form-control" id="assigned_locker" name="assigned_locker" required readonly>
@@ -195,7 +197,7 @@ include("includes/session.php");
 
                                             <h5>Receiver Information</h5>
                                             <hr>
-
+                                           
                                             <div class="form-group">
                                                 <label class="d-block">Receiver Fullname</label>
                                                 <input type="text" style="border-color:#7CB74B; border-width:1px; border-radius:10px" class="form-control" id="receiver_fullname" name="receiver_fullname" required placeholder="Enter Receiver Fullname">
@@ -205,20 +207,16 @@ include("includes/session.php");
                                                 <label class="d-block">Receiver ID Number (<small>xx-xxxxxxxPxx</small>)</label>
                                                 <input type="text" style="border-color:#7CB74B; border-width:1px; border-radius:10px" class="form-control" id="receiver_id_number" name="receiver_id_number" required placeholder="Enter Receiver ID Number" pattern="\d{2}-\d{7}[A-Z]\d{2}" title="ID Number must be in the format 63-2116374P85">
                                             </div>
-
+                                            
                                             <div class="form-group">
                                                 <label class="d-block">Receiver Phone Number</label>
                                                 <input type="text" style="border-color:#7CB74B; border-width:1px; border-radius:10px" class="form-control" id="receiver_phone_number" name="receiver_phone_number" required value="263">
                                             </div>
-
+                                           
                                             <div class="form-group">
                                                 <label class="d-block">Receiver Address</label>
                                                 <textarea style="border-color:#7CB74B; border-width:1px; border-radius:10px" class="form-control" id="receiver_address" name="receiver_address" required placeholder="Receiver Address....." rows=2></textarea>
                                             </div>
-                                            
-                                            
-                    
-                                            
                                           
                                             <button type="submit" onclick="record_new_parcel_show_loader()" class="btn btn-primary" name="record_new_parcel">Record New Parcel</button>
                                             
@@ -296,10 +294,10 @@ include("includes/session.php");
 });
 
     </script>
-   
+  
     
     <script>
-        function record_new_department_show_loader() {
+        function record_new_parcel_show_loader() {
             if ($('#parcel_size').val() != '' || $('#parcel_sent_to_province').val() != '' || $('#sender_phone_number').val() != '' || $('#sender_address').val() != '' || $('#receiver_fullname').val() != '' || $('#receiver_id_number').val() != '' || $('#receiver_phone_number').val() != '' || $('#receiver_address').val() != '') {
                 $('#loader').show();
         }

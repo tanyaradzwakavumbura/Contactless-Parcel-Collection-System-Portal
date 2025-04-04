@@ -31,6 +31,9 @@ if($currentPage == "record_new_member.php" || $currentPage == "view_all_full_mem
     <a href="#" class="nav-link"><i data-feather="bookmark"></i> <span>Parcels Management</span></a>
     <ul>
         <li><a href="lockers">Pending Parcels</a></li>
+        <li><a href="lockers">in-Transit Parcels</a></li>
+        <li><a href="lockers">Delivered Parcels</a></li>
+        <li><a href="lockers">Collected Parcels</a></li>
         <li><a href="lockers">Overdue Parcels</a></li>
         <li><a href="lockers">Waiting List</a></li>
     </ul>

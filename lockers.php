@@ -94,6 +94,30 @@ include("includes/session.php");
                                     $locker_location = $row['location'];
                                     $locker_status = $row['status'];
                                     $locker_id = $row['id'];
+
+                                    $find_assigned_parcel = $connect->prepare("SELECT * FROM parcels WHERE locker=?");
+                                    $find_assigned_parcel->execute([$locker_code]);
+                                    $assigned_parcel = $find_assigned_parcel->rowCount();
+                                    if($assigned_parcel == 0){
+                                        $al = "Available";
+                                        $tag = "badge badge-success";
+                                    }else{
+                                        while($row=$find_assigned_parcel->fetch(PDO::FETCH_ASSOC)){
+                                            $assigned_parcel_status = $row['status'];
+                                        }
+
+                                        if($assigned_parcel_status == "Collected"){
+                                            $al = "Available";
+                                            $tag = "badge badge-success";
+                                        }else if($assigned_parcel_status == "Pending"){
+                                            $al = "Assigned";
+                                            $tag = "badge badge-danger";
+                                        }else if($assigned_parcel_status == "In Transit"){
+                                            $al = "In Transit";
+                                            $tag = "badge badge-warning";
+                                        }
+                                        
+                                    }
     
                               
                                ?>

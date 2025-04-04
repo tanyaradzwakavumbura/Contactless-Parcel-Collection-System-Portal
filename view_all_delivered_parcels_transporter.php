@@ -52,48 +52,20 @@ include("includes/session.php");
             <div class="container ">
                 <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
                     <div>
-                        <?php
-                        if($role == "admin"){
-                            ?>
+                      
                             <nav aria-label="breadcrumb">
                             <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                                 <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">View All Full Members</li>
+                                <li class="breadcrumb-item active" aria-current="page">View All Delivered Parcels</li>
                             </ol>
                         </nav>
-                        <h4 class="mg-b-0 tx-spacing--1">View All Full Members</h4>
-                            <?php
-                        }elseif($role == "cell"){
-                            ?>
-                            <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-                                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">View All Cell Members</li>
-                            </ol>
-                        </nav>
-                        <h4 class="mg-b-0 tx-spacing--1">View All Cell Members : <?php echo $cell_name;?></h4>
-                            <?php
-                        }
-                        ?>
+                        <h4 class="mg-b-0 tx-spacing--1">View All Delivered Parcels</h4>
+                           
                     </div>
                     <div class="d-none d-md-block">
+                        <a href="view_all_pending_parceles_transporter" class="btn btn-sm pd-x-15 btn-primary btn-uppercase"><i data-feather="book" class="wd-10 mg-r-5"></i>Pending Parcels</a>
                         
-                        <?php
-                        if($role == "admin"){
-                            ?>
-                            <a href="record_new_member.php" class="btn btn-sm pd-x-15 btn-primary btn-uppercase"><i data-feather="book" class="wd-10 mg-r-5"></i>Register New Member</a>
-                        
-                        <a href="view_all_first_time_members.php" class="btn btn-sm pd-x-15 btn-warning btn-uppercase"><i data-feather="book" class="wd-10 mg-r-5"></i>Manage First Time Members</a>
-                            <?php
-                        }elseif($role == "cell"){
-                            ?>
-                            <a href="record_new_member.php" class="btn btn-sm pd-x-15 btn-primary btn-uppercase"><i data-feather="book" class="wd-10 mg-r-5"></i>Register Cell Member</a>
-                        
-                            <a href="record_new_convert.php" class="btn btn-sm pd-x-15 btn-warning btn-uppercase"><i data-feather="book" class="wd-10 mg-r-5"></i>Record New Cell Convert</a>
-                            <?php
-                        }
-                        ?>
-                    
+                        <a href="view_all_in_transit_parcels_by_transporter" class="btn btn-sm pd-x-15 btn-warning btn-uppercase"><i data-feather="book" class="wd-10 mg-r-5"></i>In-Transit Parcels</a>
                         
                     </div>
                 </div>
@@ -104,12 +76,12 @@ include("includes/session.php");
                         <table id="example1" class="table table-hover table-bordered">
                             <thead class="thead-gray-100">
                                 <tr>
-                                    <th class="wd-10p">Full Name</th>
-                                    <th class="wd-20p">Phone</th>
-                                    <th class="wd-20p">Cell</th>
-                                    <th class="wd-20p">Department</th>
-                                    <th class="wd-20p">Status</th>
-                                    <th class="wd-10p">Option</th>
+                                    <th class="wd-10p">Parcel Code</th>
+                                    <th class="wd-20p">Province</th>
+                                    <th class="wd-20p">Locker</th>
+                                    <th class="wd-20p">Receiver Name</th>
+                                    <th class="wd-20p">Receiver Phone</th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>
@@ -117,95 +89,35 @@ include("includes/session.php");
                                 <?php
                                
                                
-                               if($role == "admin"){
-                                    $find_all_full_time_members = $connect->prepare("SELECT * FROM members WHERE member_status=?");
-                                    $m_status = "member";
-                                    $find_all_full_time_members->execute([$m_status]);
-                               }else{
-                                    $find_all_full_time_members = $connect->prepare("SELECT * FROM members WHERE member_status=? AND cell_group=?");
-                                    $m_status = "member";
-                                    $find_all_full_time_members->execute([$m_status,$cell_code]);
+                               if($role == "transporter"){
+                                    $find_all_in_transit_parcels = $connect->prepare("SELECT * FROM parcels WHERE transporter=? AND status=?");
+                                    $statp = "Delivered";
+                                    $find_all_in_transit_parcels->execute([$user,$statp]);
+
                                }
                                
-                               
-                              
-                               
-                                while($row=$find_all_full_time_members->fetch(PDO::FETCH_ASSOC)){
-                                    $m_fullname = $row["fullname"];
-                                    $m_phone_number = $row["phone_number"];
-                                    $m_cell_group = $row["cell_group"];
-                                    $m_service_department = $row["service_department"];
-                                    $m_email = $row["email"];
-                                    $m_code = $row["code"];
-                                    $m_address = $row["address"];
-                                    $m_kingchat_handle = $row["kingchat_handle"];
-                                    $m_foundation_school = $row["foundation_school"];
-                                    $m_baptism_status = $row["baptism_status"];
-                                    $m_date = $row["date"];
-                                    $m_member_status = $row["member_status"];
-                                    
-                                    $find_cell_query = $connect->prepare("SELECT * FROM cells WHERE code=?");
-                                    $find_cell_query->execute([$m_cell_group]);
-                                    while($row=$find_cell_query->fetch(PDO::FETCH_ASSOC)){
-                                        $m_cell_name = $row["name"];
-                                    }
-                                    
-                                    
-                                    $find_service_department_query = $connect->prepare("SELECT * FROM departments WHERE code=?");
-                                    $find_service_department_query->execute([$m_service_department]);
-                                    while($row=$find_service_department_query->fetch(PDO::FETCH_ASSOC)){
-                                        $m_service_department_name = $row["name"];
-                                    }
-                                    
-                                    if($m_member_status == "member"){
-                                        $tag = "badge badge-primary";
-                                        $al = "Full Member";
-                                    }
+                                
+                                while($row=$find_all_in_transit_parcels->fetch(PDO::FETCH_ASSOC)){
+                                    //SELECT `id`, `code`, `size`, `province`, `locker`, `sender_phone`, `sender_address`, `receiver_fullname`, `receiver_phone`, `receiver_address`, `status`, `date`, `time`, `sender`, `transporter` FROM `parcels` WHERE 1
+                                    $par_id = $row["id"];
+                                    $par_code = $row["code"];
+                                    $par_province = $row["province"];
+                                    $par_locker = $row["locker"];
+                                    $par_receiver_fullname = $row["receiver_fullname"];
+                                    $par_receiver_phone = $row["receiver_phone"];
+
                                  
                                ?>
                                 <tr>
                                     <td>
                                         <?php
-                                        echo $m_fullname;
+                                        echo $par_code;
                                         ?>
                                     </td>
-                                    <td><?php echo $m_phone_number;?></td>
-                                    <td><?php echo $m_cell_name;?></td>
-                                    <td><?php echo $m_service_department_name;?></td>
-                                    <td><span class="<?php echo $tag;?>"><?php echo $al;?></span></td>
-                                   
-                                    
-                                    <td>
-                                        <div class="">
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Options
-                                                </button>
-
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a href="#category<?php echo $ve_id;?>" class="dropdown-item" data-toggle="modal">Update Member Details</a>
-                                                    
-                                                    <a href="#category<?php echo $ve_id;?>" class="dropdown-item" data-toggle="modal">Record Transaction</a>
-                                                    <form method="post">
-                                                        <input type="text" name="c_id" value="<?php echo $ve_id;?>" hidden>
-                                                    <?php
-                                                    if($role == "admin"){
-                                                    ?>
-                                                    
-                                                        <button type="submit" name="delete_vehicle" class="dropdown-item"> View All Transactions</button>
-                                                        
-                                                        <button type="submit" name="delete_vehicle" class="dropdown-item">Deactivate Member</button>
-                                                        
-                                                       
-                                                   
-                                                    <?php
-                                                    }
-                                                    ?>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
+                                    <td><?php echo $par_province;?></td>
+                                    <td><?php echo $par_locker;?></td>
+                                    <td><?php echo $par_receiver_fullname;?></td>
+                                    <td><?php echo $par_receiver_phone;?></td>
                                    
                                 </tr>
                                 <?php

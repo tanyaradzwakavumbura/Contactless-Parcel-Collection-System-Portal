@@ -71,95 +71,81 @@ if(isset($_SESSION["kwekwe_rank"])){
     //Account Statistics 
   
     if($role == "admin"){
+
+        //Total Lockers
+        $find_all_lockers = $connect->prepare("SELECT * FROM lockers");
+        $find_all_lockers->execute();
+        $count_all_lockers = $find_all_lockers->rowCount();
+
+        //Available Lockers
+        $find_all_available_lockers = $connect->prepare("SELECT * FROM lockers WHERE code NOT IN (SELECT locker FROM parcels WHERE status !=?)");
+        $stat = "Collected";
+        $find_all_available_lockers->execute([$stat]);
+        $count_all_available_lockers = $find_all_available_lockers->rowCount();
+
+        //Unavailable Lockers
+        $find_all_unavailable_lockers = $connect->prepare("SELECT * FROM lockers WHERE code IN (SELECT locker FROM parcels WHERE status !=?)");
+        $stat = "Collected";
+        $find_all_unavailable_lockers->execute([$stat]);
+        $count_all_unavailable_lockers = $find_all_unavailable_lockers->rowCount();
+
+        //Total Parcels
+        $find_all_parcels = $connect->prepare("SELECT * FROM parcels");
+        $find_all_parcels->execute();
+        $count_all_parcels = $find_all_parcels->rowCount();
+
+        //Active Parcels
+        $find_all_active_parcels = $connect->prepare("SELECT * FROM parcels WHERE status !=?");
+        $stat = "Collected";
+        $find_all_active_parcels->execute([$stat]);
+        $count_all_active_parcels = $find_all_active_parcels->rowCount();
+
+        //Collected Parcels
+        $find_all_collected_parcels = $connect->prepare("SELECT * FROM parcels WHERE status=?");
+        $stat = "Collected";
+        $find_all_collected_parcels->execute([$stat]);
+        $count_all_collected_parcels = $find_all_collected_parcels->rowCount();
     
 
-        //Total Full Members
-        $find_total_full_members_query = $connect->prepare("SELECT * FROM members WHERE member_status=?");
-        $m_status = "member";
-        $find_total_full_members_query->execute([$m_status]);
-        $count_total_full_members = $find_total_full_members_query->rowCount();
+    }elseif($role == "normal_user"){
+        //Pending Parcels
+        $find_all_pending_parcels = $connect->prepare("SELECT * FROM parcels WHERE status=? AND sender=?");
+        $stat = "Pending";
+        $find_all_pending_parcels->execute([$stat,$user]);
+        $count_all_pending_parcels = $find_all_pending_parcels->rowCount();
 
-        //Total First Time Members
-        $find_total_first_time_members_query = $connect->prepare("SELECT * FROM members WHERE member_status=?");
-        $m_status_2 = "first_timer";
-        $find_total_first_time_members_query->execute([$m_status_2]);
-        $count_total_first_timers_members = $find_total_first_time_members_query->rowCOunt();
+        //InTransit Parcels
+        $find_all_in_transit_parcels = $connect->prepare("SELECT * FROM parcels WHERE status=? AND sender=?");
+        $stat = "InTransit";
+        $find_all_in_transit_parcels->execute([$stat,$user]);
+        $count_all_in_transit_parcels = $find_all_in_transit_parcels->rowCount();
 
-        //Total Baptized Members
-        $find_total_baptized_members = $connect->prepare("SELECT * FROM members WHERE member_status=? AND baptism_status=?");
-        $b_status = "Yes";
-        $find_total_baptized_members->execute([$m_status,$b_status]);
-        $count_all_baptized_members = $find_total_baptized_members->rowCount();
-
-        //Total FOundation School Members
-        $find_total_foundation_members = $connect->prepare("SELECT * FROM members WHERE member_status=? AND foundation_school=?");
-        $find_total_foundation_members->execute([$m_status,$b_status]);
-        $count_total_foundation_members = $find_total_foundation_members->rowCount();
-
-        //Total Cells
-        $find_total_cells = $connect->prepare("SELECT * FROM cells");
-        $find_total_cells->execute();
-        $count_total_cells = $find_total_cells->rowCOunt();
-
-        //Service Department
-        $find_total_service_departments = $connect->prepare("SELECT * FROM departments");
-        $find_total_service_departments->execute();
-        $count_total_service_departments = $find_total_service_departments->rowCount();
-  
-        //Members without Cells
-        $find_all_members_without_cells_query = $connect->prepare("SELECT * FROM members WHERE cell_group=?");
-        $no_cell = "No-Cell";
-        $find_all_members_without_cells_query->execute([$no_cell]);
-        $count_total_members_without_cells = $find_all_members_without_cells_query->rowCount();
-
-
-        //Members without Service Departments
-        $find_total_members_without_departments = $connect->prepare("SELECT * FROM members WHERE service_department=?");
-        $no_department = "No-Department";
-        $find_total_members_without_departments->execute([$no_department]);
-        $count_total_members_without_departments = $find_total_members_without_departments->rowCOunt();
-
-        //Male Members
-        $find_total_male_members_query = $connect->prepare("SELECT * FROM members WHERE gender=? AND member_status=?");
-        $m_male = "Male";
-        $find_total_male_members_query->execute([$m_male,$m_status]);
-        $count_total_male_members = $find_total_male_members_query->rowCount();
-
-        //Female Members
-        $find_total_female_members_query = $connect->prepare("SELECT * FROM members WHERE gender=? AND member_status=?");
-        $m_female = "Female";
-        $find_total_female_members_query->execute([$m_female,$m_status]);
-        $count_total_female_members = $find_total_female_members_query->rowCount(); 
-    
-        //FInd All Active Projects
-        $stat = "";
-        $find_all_active_projects = $connect->prepare("SELECT * FROM projects WHERE status=?");
-        $find_all_active_projects->execute([$stat]);
-        $count_all_active_projects = $find_all_active_projects->rowCount();
-
-    }elseif($role == "cell"){
-        //Total Full Members
-        $find_total_full_members_query = $connect->prepare("SELECT * FROM members WHERE member_status=? AND cell_group=?");
-        $m_status = "member";
-        $find_total_full_members_query->execute([$m_status,$cell_code]);
-        $count_total_full_members = $find_total_full_members_query->rowCount();
-
-        //Total Cell Converts
-        $find_total_cell_converts_query = $connect->prepare("SELECT * FRom members WHERE cell_group=? AND member_status=?");
-        $con = "convert";
-        $find_total_cell_converts_query->execute([$cell_code,$con]);
-        $count_total_cell_converts = $find_total_cell_converts_query->rowCount();
+        //Delievered Parcels
+        $find_all_delievered_parcels = $connect->prepare("SELECT * FROM parcels WHERE status=? AND sender=?");
+        $stat = "Delivered";
+        $find_all_delievered_parcels->execute([$stat,$user]);
+        $count_all_delievered_parcels = $find_all_delievered_parcels->rowCount();
       
-    }elseif($role == "foundation_school"){
-        //Total Classes 
+    }elseif($role == "transporter"){
+        //Pending Parcels 
+        $find_all_pending_parcels = $connect->prepare("SELECT * FROM parcels WHERE status=?");
+        $stat = "Pending";
+        $find_all_pending_parcels->execute([$stat]);
+        $count_all_pending_parcels = $find_all_pending_parcels->rowCount();
 
-        //Members who have done Foundation School 
+        //InTransit Parcels
+        $find_all_in_transit_parcels = $connect->prepare("SELECT * FROM parcels WHERE status=? ANd transporter=?");
+        $stat = "InTransit";
+        $find_all_in_transit_parcels->execute([$stat,$user]);
+        $count_all_in_transit_parcels = $find_all_in_transit_parcels->rowCount();
 
-        //Graduated Members 
+        //Delievered Parcels
+        $find_all_delievered_parcels = $connect->prepare("SELECT * FROM parcels WHERE status=? AND transporter=?");
+        $stat = "Delivered";
+        $find_all_delievered_parcels->execute([$stat,$user]);
+        $count_all_delievered_parcels = $find_all_delievered_parcels->rowCount();
 
-        //Pending Members 
-
-        //Members who haven't started yet
+        
     }
 }
 
@@ -384,18 +370,141 @@ elseif(isset($_POST["record_new_parcel"])){
         $add_query = $connect->prepare("INSERT INTO parcels (code, size, province, locker, sender_phone, sender_address, receiver_fullname, receiver_phone, receiver_address, status, date, time, sender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $add_query->execute([$parcel_code, $parcel_size, $parcel_sent_to_province, $assigned_locker, $sender_phone_number, $sender_address, $receiver_fullname, $receiver_phone_number, $receiver_address, $parcel_status, $current_date, $current_time, $user]);
 
-        //$basic  = new \Vonage\Client\Credentials\Basic("6bcb73b6", "I78Kj8xFjrzOrMeS");
-       // $client = new \Vonage\Client($basic);
+        //The Text Message to be sent 
+        $text_message = "Hi there $receiver_fullname, your parcel with the Reference $parcel_code, has been sent to you and you will be notified as soon as it arrives for collection. Please bring your ID card when collecting the parcel. Thank you.";
 
+       $response = $client->sms()->send(
+            new \Vonage\SMS\Message\SMS($receiver_phone_number, "ZIMPOST", $text_message)
+        );
+    
+        $message_selp = $response->current();
 
-         $message = "<center>Parcel Successfully Added</center>";
-         $alert = "alert alert-success alert-dismissible fade show";
+        $message = "<center>Parcel Successfully Added</center>";
+        $alert = "alert alert-success alert-dismissible fade show";
 
     }catch(PDOException $error){
         $message = $error->getMessage();
     }
 }
 
+
+/*----------------------------------------------------------------------------------------------------------------------------
+
+                                           TRANSPORT A PARCEL CODE
+----------------------------------------------------------------------------------------------------------------------------*/  
+elseif(isset($_POST["take_parcels_in_province_and_transport"])){
+    $message = "";
+    $alert = "";
+    $span = "";
+
+
+    
+   
+    
+    $transport_province = $_POST["transport_province"];
+
+
+    try{ 
+
+        $statp = "Pending";
+
+        $find_all_parcels_in_province = $connect->prepare("SELECT * FROM parcels WHERE province=? AND status=?");
+        $find_all_parcels_in_province->execute([$transport_province,$statp]);
+        while($row=$find_all_parcels_in_province->fetch(PDO::FETCH_ASSOC)){
+            $parcel_code = $row["code"];
+            $parcel_size = $row["size"];
+            $parcel_sent_to_province = $row["province"];
+            $assigned_locker = $row["locker"];
+            $sender_phone_number = $row["sender_phone"];
+            $sender_address = $row["sender_address"];
+            $receiver_fullname = $row["receiver_fullname"];
+            $receiver_id_number = $row["receiver_id_number"];
+            $receiver_phone_number = $row["receiver_phone"];
+            $receiver_address = $row["receiver_address"];
+            $parcel_status = "InTransit";
+
+
+            $update_query = $connect->prepare("UPDATE parcels SET status=?, transporter=? WHERE code=?");
+            $update_query->execute([$parcel_status,$user,$parcel_code]);
+
+            $text_message = "Hi there $receiver_fullname, your parcel with the Reference $parcel_code, is now being transported to the Province $transport_province, you will be notified when collection is ready.";
+
+            $response = $client->sms()->send(
+                new \Vonage\SMS\Message\SMS($receiver_phone_number, "ZIMPOST", $text_message)
+            );
+
+            $message_selp = $response->current();
+        }
+
+
+        $message = "<center>Parcels now inTransit to the Province : $transport_province</center>";
+        $alert = "alert alert-success alert-dismissible fade show";
+
+    }catch(PDOException $error){
+        $message = $error->getMessage();
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------------
+
+                                           PARCEL HAS BEEN DELIVERD SUCCESSFULLY CODE
+----------------------------------------------------------------------------------------------------------------------------*/  
+elseif(isset($_POST["parcel_was_delivered_successfully"])){
+    $message = "";
+    $alert = "";
+    $span = "";
+
+
+    
+   
+    
+    $the_code = $_POST["the_code"];
+
+
+    try{ 
+
+        $find_parcel_details = $connect->prepare("SELECT * FROM parcels WHERE code=?");
+        $find_parcel_details->execute([$the_code]);
+        while($row=$find_parcel_details->fetch(PDO::FETCH_ASSOC)){
+            $parcel_code = $row["code"];
+            $parcel_size = $row["size"];
+            $parcel_sent_to_province = $row["province"];
+            $assigned_locker = $row["locker"];
+            $sender_phone_number = $row["sender_phone"];
+            $sender_address = $row["sender_address"];
+            $receiver_fullname = $row["receiver_fullname"];
+            $receiver_id_number = $row["receiver_id_number"];
+            $receiver_phone_number = $row["receiver_phone"];
+            $receiver_address = $row["receiver_address"];
+
+
+            $parcel_status = "Delivered";
+
+            $random_pin = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+
+            //Update the parcel status to Delivered
+            $update_query = $connect->prepare("UPDATE parcels SET status=?, pin=? WHERE code=?");
+            $update_query->execute([$parcel_status,$random_pin,$the_code]);
+
+            //Send Text Message to Receiver
+            $text_message = "Hi there, your parcel with the Reference <b>$the_code</b>, has been successfully delivered to you, Locker Code : $assigned_locker, Your Access Pin : $random_pin collect your parcel in the next 24 hours.";
+
+            //Send Text Message to Receiver
+            $response = $client->sms()->send(
+                new \Vonage\SMS\Message\SMS($receiver_phone_number, "ZIMPOST", $text_message)
+            );
+
+            //Get the response from the SMS API
+            $message_selp = $response->current();
+        }
+
+        echo "<script type='text/javascript'>window.location.href='view_all_in_transit_parcels_by_transporter'</script>";
+
+        
+    }catch(PDOException $error){
+        $message = $error->getMessage();
+    }
+}
 /*----------------------------------------------------------------------------------------------------------------------------
 
                                            ADD NEW MEMBER IN THE DATABASE CODE
@@ -2256,7 +2365,7 @@ elseif(isset($_POST["register_new_user"])){
     $p_email = $_POST["p_email"];
     $p_password = $_POST["p_password"];
     $p_account = $_POST["p_account"];
-    $p_main_job = "SA Zone D";
+    $p_main_job = "Account User";
     
     try{ 
         
